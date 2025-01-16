@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.get('/', (req, res)=>{
-    res.send("this is Webpage");
+    res.send("This is Webpage");
 })
 
 app.get('/ourpartners', (req, res)=>{
