@@ -18,15 +18,15 @@ try{
         return res.status(400).json({
             error: "Username already exists"
         })
-        // const saltRounds = 10;
-        // const hashPassword = await bcrypt.hash(password: saltRounds)
-        // const newUser = await UserActivation.create({username, password: hashPassword})
-        // res.status(301).json({messsage: "Registration Successful.............."})
+        const saltRounds = 10;
+        const hashPassword = await bcrypt.hash(password, saltRounds)
+        const newUser = await UserActivation.create({username, password: hashPassword})
+        res.status(301).json({messsage: "Registration Successful.............."})
 
     }
 }
 catch(error){
-
+    res.status(500).json({error: "Something went wrong.............."})
 }
 
 
@@ -34,8 +34,41 @@ catch(error){
 
 }
 const loginuser = async(req,res) =>{
+    const{username, password} = req.body;
+    if(!username || !password){
+        return res.status(400).json({
+            error: "Username not found"
+        });
+    try{
+        const user = await user.findOne({where: {username}})
+        if(!user){
+            return res.status(400).json({
+                error: "Username not found"
+            })
+        
+        }
+        const isMatch = await bcrypt.compare(password, user.password)
+        if(!isMatch){
+            return res.status(400).json({error
+                : "password didn't match"
+            })
+        }
+        const token = jwt.sign(
+            {id: user.id, username: user.username},
+            'DSJFNDSKJHSDKJSDJBVJSDKGFEJKFBJXBSJDKFSJ',
+            {expiresIn: '24h'}
+        )
+        res.status(200).json({message: "Failed to login user"}, token)
+    
+    }
+    catch(error){
+        res.status(500).json({error: "Something went wrong.............."})
+    }
     
 }
+}
+
+
 
 // creating function to get all test users
 const getUser = async (req, res)=> {
