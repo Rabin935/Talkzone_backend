@@ -1,13 +1,13 @@
 const { Database, DataTypes } = require('sequelize');
 const sequelize = require('../Database/db');
 
-const Group = new sequelize.default('Group', {
-    groupId: {
+const Chat = new sequelize.default('Chat', {
+    chatId: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    groupName: {
+    chatType: {
         type: DataTypes.STRING,
         required: true
     },
@@ -15,10 +15,10 @@ const Group = new sequelize.default('Group', {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
     },
-    adminId: {
-        type: DataTypes.INTEGER,
-        required: true
+    updatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
     }
 });
 
-module.exports = Group;
+module.exports = Chat;

@@ -5,35 +5,43 @@ const Test = require('../model/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const registerUser = async(req, res) => {
-const {username, password} = req.body;
-if(!username || !password){
-    return res.status(400).json({
-        error: "Insert the usernmae and password"
-    });
+const registerUser = async (req, res) => {
+    const { username, password, email } = req.body;
 
-try{
-    const existingUser = await UserActivation.findOne({Where: {username}})
-    if(existingUser){
+    if (!username || !password || !email) {
         return res.status(400).json({
-            error: "Username already exists"
-        })
-        const saltRounds = 10;
-        const hashPassword = await bcrypt.hash(password, saltRounds)
-        const newUser = await UserActivation.create({username, password: hashPassword})
-        res.status(301).json({messsage: "Registration Successful.............."})
-
+            error: "Insert the username, password, and email"
+        });
     }
-}
-catch(error){
-    res.status(500).json({error: "Something went wrong.............."})
-}
+
+    try {
+        const existingUser = await UserActivation.findOne({ where: { username } });
+
+        if (existingUser) {
+            return res.status(400).json({
+                error: "Username already exists"
+            });
+        }
+
+        const existingEmail = await UserActivation.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({
+                error: "Email already exists"
+            });
+        }
+
+        const saltRounds = 10;
+        const hashPassword = await bcrypt.hash(password, saltRounds);
+        const newUser = await UserActivation.create({ username, password: hashPassword, email });
+
+        res.status(201).json({ message: "Registration Successful" });
+    } catch (error) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+};
 
 
-}
-
-}
-const loginuser = async(req,res) =>{
+const loginUser = async(req,res) =>{
     const{username, password} = req.body;
     if(!username || !password){
         return res.status(400).json({
@@ -83,10 +91,10 @@ const getUser = async (req, res)=> {
 }
 
 // create functions to create Test users
-const create_users = async (req, res)=> {
+const createUsers = async (req, res)=> {
     try{
         const {id, phone_number, username, password}  = req.body;
-        const newtest = await Test.create({username, password});
+        const newtest = await Test.create({username, email, password});
         res.status(200).json(newtest);
         console.log('New Test user Created');
     }
@@ -120,4 +128,4 @@ const deleteUser = async(req, res)=>{
     }
 }
 
-module.exports = {getUser, create_users, updateUser, deleteUser};
+module.exports = {getUser, createUsers, updateUser, deleteUser};

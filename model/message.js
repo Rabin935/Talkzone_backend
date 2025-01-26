@@ -1,26 +1,32 @@
+const { Database, DataTypes } = require('sequelize');
 const sequelize = require('../Database/db');
 
-const UserDetail = sequelize.define('UserDetail', {
-    id: {
-        type: sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+const Message = new sequelize.default('Message', {
+    messageId: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
     },
-    phone_number: {
-        type: sequelize.STRING,
-        allowNull: false,
-        unique: true
+    chatId: {
+        type: DataTypes.INTEGER,
+        required: true
     },
-    username: {
-        type: sequelize.STRING,
-        allowNull: false,
-        unique: true
+    senderId: {
+        type: DataTypes.INTEGER,
+        required: true
     },
-    password: {
-        type: sequelize.STRING,
-        allowNull: false
+    content: {
+        type: DataTypes.TEXT,
+        required: true
+    },
+    timestamp: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+    },
+    messageType: {
+        type: DataTypes.STRING,
+        required: true
     }
 });
 
-module.exports = UserDetail;
-
+module.exports = Message;

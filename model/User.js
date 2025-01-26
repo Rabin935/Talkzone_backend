@@ -8,12 +8,11 @@ const Userdetail = new sequelize.default('User', {
         require: true,
         unique:true
     },
-    phone_number: {
-        type: String,
-        required: true,
-        unique: true
-    },
     username: {
+        type: String,
+        required: true
+    },
+    email: {
         type: String,
         required: true
     },
@@ -23,4 +22,4 @@ const Userdetail = new sequelize.default('User', {
     }
 });
 
-module.exports = Test1;
+module.exports = Userdetail;
