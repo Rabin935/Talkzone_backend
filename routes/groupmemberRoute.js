@@ -1,5 +1,7 @@
-const { Router } = require('express');
-const router = Router();
+const express = require('express');
+
+const router = express.Router();
+
 const groupMemberController = require('../controller/groupmembercontroller');
 
 router.post('/', groupMemberController.addGroupMember);

@@ -1,5 +1,7 @@
 // Importing model
 const Message = require('../model/message');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const createMessage = async (req, res) => {
     try {

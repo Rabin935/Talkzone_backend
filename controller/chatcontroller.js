@@ -1,6 +1,9 @@
 // Importing model
 const Chat = require('../model/chat');
 
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 const createChat = async (req, res) => {
     try {
         const chat = await Chat.create(req.body);

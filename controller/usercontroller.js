@@ -1,9 +1,9 @@
 // Importing model
-const { Model } = require('sequelize');
-const Test = require('../model/User');
+const User = require('../model/Users')
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const Users = require('../model/Users');
 
 const registerUser = async (req, res) => {
     const { username, password, email } = req.body;
@@ -78,30 +78,40 @@ const loginUser = async(req,res) =>{
 
 
 
-// creating function to get all test users
-const getUser = async (req, res)=> {
+const getUser = async(req, res)=>{
+
     try{
-        const test = await test.findall();
-        res.status(200).json(Tests);
-        console.log("Retrieve all test users");
+        const tests = await User.findAll();
+        res.status(200).json(tests);
+
     }
     catch(error){
-        res.status(500).json({error: "Failed to retrieve test data"});
+        res.status(500).json({error: "Failed to Load"})
     }
 }
 
+
+
 // create functions to create Test users
-const createUsers = async (req, res)=> {
-    try{
-        const {id, phone_number, username, password}  = req.body;
-        const newtest = await Test.create({username, email, password});
-        res.status(200).json(newtest);
-        console.log('New Test user Created');
+const createUsers = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        if (!username || !email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const newUser = new User({ username, email, password });
+        await newUser.save();
+
+        res.status(201).json({ message: "User created successfully", user: newUser });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to create user", error: error.message });
     }
-    catch(error){
-        res.status(500).json({error: 'Failed to create test user'});
-    }
-}
+};
+
+
 const updateUser = async(req, res)=>{
     try {
         const user = await User.findByPk(req.params.id);
@@ -128,4 +138,6 @@ const deleteUser = async(req, res)=>{
     }
 }
 
-module.exports = {getUser, createUsers, updateUser, deleteUser};
+
+
+module.exports = {getUser, createUsers, updateUser, deleteUser, loginUser, registerUser};

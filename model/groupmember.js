@@ -1,4 +1,4 @@
-const { Database, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../Database/db');
 
 const GroupMember = new sequelize.default('GroupMember', {
